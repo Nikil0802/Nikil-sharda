@@ -1,0 +1,63 @@
+HTML 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch Data with Promises</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #data {
+            margin-top: 20px;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Fetch Data from Public API</h1>
+    <button id="fetchData">Fetch Data</button>
+    <div id="data"></div>
+
+    <script src="INDEX2.JS"></script>
+</body>
+</html>
+
+
+
+JAVASCRIPT
+
+document.addEventListener('DOMContentLoaded', () => {
+    const fetchDataButton = document.getElementById('fetchData');
+    const dataDiv = document.getElementById('data');
+
+    fetchDataButton.addEventListener('click', () => {
+        // API URL
+        const apiUrl = 'https://dog.ceo/api/breeds/image/random'; // Example API (Dog API)
+
+        // Clear previous data
+        dataDiv.innerHTML = 'Loading...';
+
+        // Fetch data from API
+        fetch(apiUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Display data
+                const imageUrl = data.message;
+                dataDiv.innerHTML = `<img src="${imageUrl}" alt="Random Dog Image" style="max-width: 500px;"/>`;
+            })
+            .catch(error => {
+                // Display error message
+                dataDiv.innerHTML = `Error: ${error.message}`;
+            });
+    });
+});
