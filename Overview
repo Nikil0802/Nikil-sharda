@@ -1,0 +1,129 @@
+HTML 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Data Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .input-section {
+            margin-bottom: 20px;
+        }
+        .input-section input {
+            margin-right: 10px;
+        }
+        .graph-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .bar {
+            height: 30px;
+            margin-bottom: 5px;
+            color: white;
+            text-align: center;
+            line-height: 30px;
+        }
+        .sort-buttons {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Product Data Visualization</h1>
+
+    <div class="input-section">
+        <input type="text" id="product-name" placeholder="Product Name">
+        <input type="number" id="product-price" placeholder="Price" step="0.01">
+        <input type="number" id="product-rating" placeholder="Rating" step="0.1" min="0" max="5">
+        <button id="add-product">Add Product</button>
+    </div>
+
+    <div class="sort-buttons">
+        <button id="sort-price">Sort by Price</button>
+        <button id="sort-rating">Sort by Rating</button>
+    </div>
+
+    <div class="graph-container">
+        <div id="price-graph" class="graph"></div>
+        <div id="rating-graph" class="graph"></div>
+    </div>
+
+    <script src="INDEX2.JS"></script>
+</body>
+</html>
+
+
+
+JAVA SCRIPT 
+
+document.addEventListener('DOMContentLoaded', function () {
+    const productNameInput = document.getElementById('product-name');
+    const productPriceInput = document.getElementById('product-price');
+    const productRatingInput = document.getElementById('product-rating');
+    const addProductButton = document.getElementById('add-product');
+    const priceGraph = document.getElementById('price-graph');
+    const ratingGraph = document.getElementById('rating-graph');
+    const sortPriceButton = document.getElementById('sort-price');
+    const sortRatingButton = document.getElementById('sort-rating');
+
+    let products = [];
+
+    function updateGraphs() {
+        // Clear existing graphs
+        priceGraph.innerHTML = '';
+        ratingGraph.innerHTML = '';
+
+        // Create bars for price and rating
+        products.forEach(product => {
+            // Create price bar
+            const priceBar = document.createElement('div');
+            priceBar.className = 'bar';
+            priceBar.style.backgroundColor = 'blue';
+            priceBar.style.width = `${product.price * 10}px`; // Scale for visibility
+            priceBar.textContent = `${product.name} - $${product.price}`;
+            priceGraph.appendChild(priceBar);
+
+            // Create rating bar
+            const ratingBar = document.createElement('div');
+            ratingBar.className = 'bar';
+            ratingBar.style.backgroundColor = 'green';
+            ratingBar.style.width = `${product.rating * 20}px`; // Scale for visibility
+            ratingBar.textContent = `${product.name} - ${product.rating} stars`;
+            ratingGraph.appendChild(ratingBar);
+        });
+    }
+
+    function addProduct() {
+        const name = productNameInput.value.trim();
+        const price = parseFloat(productPriceInput.value.trim());
+        const rating = parseFloat(productRatingInput.value.trim());
+
+        if (name && !isNaN(price) && !isNaN(rating)) {
+            products.push({ name, price, rating });
+            updateGraphs();
+            productNameInput.value = '';
+            productPriceInput.value = '';
+            productRatingInput.value = '';
+        } else {
+            alert('Please enter valid product data.');
+        }
+    }
+
+    function sortByPrice() {
+        products.sort((a, b) => a.price - b.price);
+        updateGraphs();
+    }
+
+    function sortByRating() {
+        products.sort((a, b) => a.rating - b.rating);
+        updateGraphs();
+    }
+
+    addProductButton.addEventListener('click', addProduct);
+    sortPriceButton.addEventListener('click', sortByPrice);
+    sortRatingButton.addEventListener('click', sortByRating);
+});
